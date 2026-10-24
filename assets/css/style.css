@@ -1,0 +1,690 @@
+/* ==========================================================================
+   assets/css/style.css
+   Portfólio de Gabriel Jeremias Cherem
+
+   Índice
+   1. Tokens (cores, fontes, raios)
+   2. Base
+   3. Utilitários e componentes comuns (wrap, botões, ícones)
+   4. Navegação
+   5. Hero e cartão de API
+   6. Estrutura das seções
+   7. Sobre
+   8. Habilidades
+   9. Linha do tempo (experiência e formação)
+   10. Projetos
+   11. Certificações
+   12. Contato
+   13. Rodapé
+   14. Movimento reduzido
+   ========================================================================== */
+
+
+/* 1. TOKENS ================================================================ */
+:root {
+    /* Superfícies: azul-petróleo muito escuro, não preto puro */
+    --bg:           #0a1620;
+    --surface:      #10212e;
+    --surface-2:    #142a3a;
+    --line:         #1f3748;
+    --line-strong:  #2c4a5f;
+
+    /* Texto */
+    --text:         #e5eff4;
+    --muted:        #93a9b8;
+
+    /* Azul = o que é interativo ou estrutural. Verde = estado/sucesso. */
+    --blue:         #4aa8ff;
+    --blue-soft:    #8cc8ff;
+    --green:        #34e0a1;
+    --green-soft:   #7eeac0;
+    --danger:       #ff8f8f;
+
+    --font-sans: 'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --radius-sm:   6px;
+    --radius-md:   8px;
+    --radius-lg:   12px;
+    --radius-pill: 999px;
+
+    --nav-h: 4rem;
+}
+
+
+/* 2. BASE ================================================================== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+    color-scheme: dark;
+    scroll-padding-top: calc(var(--nav-h) + 1rem); /* o menu fixo não cobre o título ao rolar */
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Rolagem suave só para quem não pediu menos movimento */
+@media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+h1, h2, h3 {
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+a {
+    color: var(--blue-soft);
+    text-underline-offset: 0.2em;
+}
+a:hover { color: var(--blue); }
+
+img { max-width: 100%; height: auto; display: block; }
+
+:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+::selection { background: rgb(52 224 161 / 0.28); }
+
+
+/* 3. UTILITÁRIOS E COMPONENTES COMUNS ===================================== */
+.wrap {
+    width: min(100% - 2.5rem, 72rem);
+    margin-inline: auto;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 200;
+    padding: 0.6rem 1rem;
+    background: var(--green);
+    color: #04231a;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+}
+.skip-link:focus { top: 1rem; color: #04231a; }
+
+/* Botões */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.75rem 1.3rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font: inherit;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn--primary { background: var(--green); color: #04231a; }
+.btn--primary:hover { background: #5df0b8; color: #04231a; }
+.btn--ghost { border-color: var(--line-strong); color: var(--text); }
+.btn--ghost:hover { border-color: var(--blue); color: var(--blue-soft); }
+
+/* Lista de redes sociais (hero e rodapé) */
+.social-list { display: flex; align-items: center; gap: 0.25rem; }
+
+.icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-md);
+    color: var(--muted);
+    font-size: 1.35rem;
+    transition: color 0.15s, background-color 0.15s;
+}
+.icon-link:hover { color: var(--text); background: var(--surface-2); }
+
+
+/* 4. NAVEGAÇÃO ============================================================= */
+.site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgb(10 22 32 / 0.86);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+}
+
+.site-nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--nav-h);
+}
+
+.site-nav__brand {
+    color: var(--text);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+}
+.site-nav__brand:hover { color: var(--green-soft); }
+
+.site-nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--line-strong);
+    margin-left: auto; /* empurra o botão para o canto direito no mobile */
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+}
+
+/* Ícone do botão: três linhas fechado, "X" aberto */
+.site-nav__icon-close { display: none; }
+.site-nav__toggle[aria-expanded="true"] .site-nav__icon-open { display: none; }
+.site-nav__toggle[aria-expanded="true"] .site-nav__icon-close { display: inline; }
+
+/* Mobile: o menu abre como painel logo abaixo da barra */
+.site-nav__menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 1.25rem 1.25rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+}
+.site-nav__menu.is-open { display: flex; }
+
+.site-nav__link {
+    display: block;
+    padding: 0.65rem 0.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.site-nav__link:hover { color: var(--text); }
+.site-nav__link[aria-current="true"] {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--blue);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.5rem;
+}
+
+@media (min-width: 960px) {
+    .site-nav__toggle { display: none; }
+    .site-nav__inner > nav { margin-left: auto; } /* menu horizontal no canto direito */
+
+    .site-nav__menu {
+        display: flex;
+        position: static;
+        flex-direction: row;
+        gap: 0.25rem;
+        padding: 0;
+        background: none;
+        border-bottom: 0;
+    }
+    .site-nav__link { padding: 0.5rem 0.7rem; font-size: 0.95rem; }
+}
+
+
+/* 5. HERO E CARTÃO DE API ================================================== */
+.hero {
+    display: flex;
+    align-items: center;
+    min-height: calc(100svh - var(--nav-h));
+    padding: clamp(3rem, 8vw, 5rem) 0 clamp(4rem, 9vw, 6rem);
+}
+
+.hero__grid {
+    display: grid;
+    align-items: center;
+    gap: 3rem;
+}
+
+@media (min-width: 960px) {
+    .hero__grid {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        gap: 4rem;
+    }
+}
+
+.hero__place {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+.hero__place i { color: var(--green); }
+
+.hero__name {
+    margin-bottom: 1.5rem;
+    font-size: clamp(2.9rem, 7.4vw, 5.4rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.hero__title {
+    max-width: 32rem;
+    margin-bottom: 2rem;
+    color: var(--muted);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.5;
+}
+
+.hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+.hero__actions .social-list { margin-left: 0.5rem; }
+
+/* Cartão que imita a resposta de uma API REST */
+.api-card {
+    min-width: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+}
+
+.api-card__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1.1rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+}
+
+.api-request { display: flex; align-items: center; gap: 0.7rem; min-width: 0; }
+
+.api-method {
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    background: rgb(74 168 255 / 0.16);
+    color: var(--blue-soft);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.api-route { color: var(--text); overflow-wrap: anywhere; }
+
+.api-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--green);
+    white-space: nowrap;
+    transition: opacity 0.25s;
+}
+.api-status::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--green);
+}
+
+.api-card__body { padding: 1.15rem 1.25rem 1.4rem; overflow-x: auto; }
+
+.api-code { margin: 0; line-height: 1.8; white-space: pre; tab-size: 2; }
+.api-code code { font-family: inherit; }
+
+.api-line { display: block; white-space: pre; transition: opacity 0.2s; }
+
+/* Estados da animação (ativados por assets/js/main.js) */
+.api-line.is-pending { opacity: 0; }
+.api-card.is-loading .api-status { opacity: 0; }
+
+.tok-key { color: var(--blue-soft); }
+.tok-str { color: var(--green-soft); }
+.tok-lit { color: var(--text); }
+
+
+/* 6. ESTRUTURA DAS SEÇÕES ================================================== */
+.section {
+    padding: clamp(4rem, 9vw, 6.5rem) 0;
+    border-top: 1px solid var(--line);
+}
+
+.section__grid { display: grid; gap: 2rem 4rem; }
+
+.section__title {
+    font-size: clamp(1.7rem, 3vw, 2.2rem);
+    letter-spacing: -0.03em;
+    font-weight: 700;
+}
+
+@media (min-width: 900px) {
+    .section__grid { grid-template-columns: 13rem minmax(0, 1fr); }
+
+    /* O título acompanha a leitura enquanto o conteúdo da seção rola */
+    .section__head {
+        position: sticky;
+        top: calc(var(--nav-h) + 2rem);
+        align-self: start;
+    }
+}
+
+
+/* 7. SOBRE ================================================================= */
+.prose p { max-width: 62ch; }
+.prose p + p { margin-top: 1.1rem; }
+
+.principle {
+    max-width: 36rem;
+    margin-top: 2.25rem;
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--green);
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+}
+
+.facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1.25rem 2.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+}
+.facts dt { color: var(--muted); font-size: 0.92rem; }
+.facts dd { margin-top: 0.1rem; font-weight: 600; }
+
+
+/* 8. HABILIDADES =========================================================== */
+.skill-group {
+    display: grid;
+    gap: 0.9rem 2rem;
+    padding: 1.6rem 0;
+    border-top: 1px solid var(--line);
+}
+.skill-group:first-child { padding-top: 0; border-top: 0; }
+.skill-group:last-child { padding-bottom: 0; }
+
+@media (min-width: 700px) {
+    .skill-group { grid-template-columns: 10.5rem minmax(0, 1fr); }
+}
+
+.skill-group__name {
+    padding-top: 0.5rem;
+    color: var(--muted);
+    font-size: 0.97rem;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.skill-list { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+.skill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.45rem 0.95rem 0.45rem 0.8rem;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-pill);
+    font-size: 0.98rem;
+    line-height: 1.3;
+    transition: border-color 0.15s;
+}
+.skill:hover { border-color: var(--blue); }
+.skill i { color: var(--blue-soft); font-size: 1.3rem; line-height: 1; }
+
+
+/* 9. LINHA DO TEMPO (experiência e formação) =============================== */
+.timeline__item {
+    display: grid;
+    gap: 0.6rem 2.5rem;
+    padding-bottom: 2.25rem;
+    margin-bottom: 2.25rem;
+    border-bottom: 1px solid var(--line);
+}
+.timeline__item:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
+
+@media (min-width: 700px) {
+    .timeline__item { grid-template-columns: 12rem minmax(0, 1fr); }
+}
+
+.timeline__when { display: flex; flex-direction: column; gap: 0.15rem; font-size: 0.95rem; }
+.timeline__period { color: var(--text); font-weight: 500; }
+.timeline__duration { color: var(--muted); }
+
+.timeline__current {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--green-soft);
+}
+.timeline__current::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--green);
+}
+
+.timeline__title { font-size: 1.35rem; font-weight: 650; }
+.timeline__org { margin-top: 0.15rem; color: var(--blue-soft); font-weight: 500; }
+.timeline__place { color: var(--muted); font-size: 0.95rem; }
+
+.timeline__details { margin-top: 1rem; max-width: 60ch; }
+.timeline__details li { position: relative; padding-left: 1.2rem; }
+.timeline__details li + li { margin-top: 0.4rem; }
+.timeline__details li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 0.5rem;
+    height: 2px;
+    background: var(--green);
+}
+
+
+/* 10. PROJETOS ============================================================= */
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: 1.5rem;
+}
+
+.project {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+}
+
+.project__image { border-radius: var(--radius-md); border: 1px solid var(--line); }
+.project__title { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.03em; }
+.project__meta { margin-top: 0.3rem; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+.project__desc { max-width: 60ch; }
+
+.project__contrib { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 0.9rem; }
+.project__contrib-label { color: var(--muted); font-size: 0.92rem; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip {
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-sm);
+    background: rgb(52 224 161 / 0.1);
+    color: var(--green-soft);
+    font-size: 0.9rem;
+}
+
+.project__link { align-self: flex-start; margin-top: auto; }
+
+.projects__more { margin-top: 1.75rem; color: var(--muted); }
+
+
+/* 11. CERTIFICAÇÕES ======================================================== */
+.cert-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: 1.75rem 3rem;
+}
+
+.cert {
+    padding-left: 1.1rem;
+    border-left: 2px solid var(--line-strong);
+}
+.cert--evento       { border-left-color: var(--blue); }
+.cert--certificacao { border-left-color: var(--green); }
+
+.cert__type { color: var(--muted); font-size: 0.92rem; }
+.cert__title { margin-top: 0.1rem; font-size: 1.2rem; font-weight: 650; }
+.cert__detail { margin-top: 0.2rem; }
+.cert__date { margin-top: 0.2rem; color: var(--muted); font-size: 0.95rem; }
+
+
+/* 12. CONTATO ============================================================== */
+.contact__intro { max-width: 52ch; margin-bottom: 2.25rem; }
+
+.contact { display: grid; gap: 2.5rem; }
+
+@media (min-width: 1000px) {
+    .contact { grid-template-columns: minmax(0, 1fr) 14rem; gap: 3.5rem; }
+}
+
+.contact__form { max-width: 34rem; }
+
+.field { display: grid; gap: 0.4rem; margin-bottom: 0.4rem; }
+.field label { font-size: 0.95rem; font-weight: 600; }
+
+.field input,
+.field textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font: inherit;
+    transition: border-color 0.15s;
+}
+.field textarea { resize: vertical; min-height: 8rem; }
+.field input:hover,
+.field textarea:hover { border-color: #3f6580; }
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+    border-color: var(--green);
+}
+.field [aria-invalid="true"] { border-color: var(--danger); }
+
+.field__error {
+    min-height: 1.35em; /* reserva o espaço e evita saltos de layout */
+    color: var(--danger);
+    font-size: 0.92rem;
+    line-height: 1.35;
+}
+
+.form-status { margin-top: 1rem; color: var(--green-soft); }
+.form-status:empty { margin-top: 0; }
+
+.contact__links { display: grid; gap: 0.5rem; align-content: start; }
+
+.contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+}
+.contact-link i { color: var(--blue-soft); font-size: 1.2rem; }
+.contact-link:hover { border-color: var(--blue); color: var(--blue-soft); }
+
+
+/* 13. RODAPÉ =============================================================== */
+.site-footer {
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.site-footer__top { color: var(--muted); }
+.site-footer__top:hover { color: var(--text); }
+
+
+/* 14. MOVIMENTO REDUZIDO =================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
