@@ -230,6 +230,18 @@ return [
             'link_rotulo'   => 'Ver repositório no GitHub',
             'imagem'        => null,
         ],
+
+        [
+          'titulo'        => 'Dashboard de paises',
+          'periodo'       => 'Nov 2026 – Nov 2026',
+          'contexto'      => 'Fizemos uma dashboard de países utilizando streamlit e pandas no python',
+          'descricao'     => 'Dashboard interativa para visualização de dados de países.',
+          'contribuicoes' => ['Back-end', 'Feature de moeda e conversão'],   // opcional
+          'link'          => 'https://github.com/AJGamer10/country-dashboard',
+          'link_rotulo'   => 'Ver no GitHub',
+          // 'imagem'        => 'assets/img/projeto.png',   // opcional
+      ],
+
     ],
 
     // -------------------------------------------------------------------------
